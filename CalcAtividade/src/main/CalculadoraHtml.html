@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CalcWeb — Calculadora</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;600;800&display=swap" rel="stylesheet" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:      #0d0f14;
+            --surface: #13161e;
+            --card:    #1a1e2a;
+            --border:  #252b3b;
+            --accent:  #00e5c3;
+            --accent2: #ff5e5b;
+            --gold:    #f0c040;
+            --text:    #c8d6e5;
+            --muted:   #5a6580;
+            --mono:    'Share Tech Mono', monospace;
+            --sans:    'Exo 2', sans-serif;
+            --radius:  10px;
+            --glow:    0 0 18px rgba(0,229,195,.25);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+
+        /* ── Header ── */
+        header {
+            padding: 1.5rem 2rem;
+            display: flex; align-items: center; gap: 1rem;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(90deg, #0d1520, #0d0f14);
+        }
+        .logo-mark {
+            width: 40px; height: 40px;
+            background: var(--accent);
+            clip-path: polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);
+            display: grid; place-items: center;
+            color: #000; font-family: var(--mono); font-size: .65rem; font-weight: bold;
+        }
+        header h1 {
+            font-weight: 800; font-size: 1.4rem; letter-spacing: .08em; text-transform: uppercase;
+            background: linear-gradient(90deg, var(--accent), #00b4ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        header .sub { font-family: var(--mono); font-size: .7rem; color: var(--muted); margin-left: auto; }
+
+        /* ── Layout ── */
+        main {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 2rem; padding: 2rem;
+            max-width: 1100px; margin: 0 auto; width: 100%;
+        }
+        @media (max-width: 820px) { main { grid-template-columns: 1fr; padding: 1rem; } }
+
+        /* ── Panel ── */
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            animation: fadeSlide .4s ease both;
+        }
+        .panel:nth-child(2) { animation-delay: .1s; }
+        .panel-header {
+            background: var(--surface); padding: .7rem 1.2rem;
+            display: flex; align-items: center; gap: .6rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .panel-header h2 {
+            font-family: var(--mono); font-size: .75rem;
+            letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+        }
+        .panel-body { padding: 1.5rem; }
+
+        /* ── Display ── */
+        .display {
+            background: #080b10; border: 1px solid var(--border);
+            border-radius: 8px; padding: 1rem 1.2rem;
+            margin-bottom: 1.2rem; min-height: 80px; position: relative; overflow: hidden;
+        }
+        .display::after {
+            content: ''; position: absolute; inset: 0;
+            background: repeating-linear-gradient(0deg,rgba(0,229,195,.015) 0px,rgba(0,229,195,.015) 1px,transparent 1px,transparent 3px);
+            pointer-events: none;
+        }
+        .display .expression { font-family: var(--mono); font-size: .8rem; color: var(--muted); min-height: 1.2em; }
+        .display .result-value {
+            font-family: var(--mono); font-size: 2.2rem;
+            color: var(--accent); text-shadow: var(--glow);
+            transition: color .2s; word-break: break-all;
+        }
+        .display .result-value.error { color: var(--accent2); text-shadow: 0 0 14px rgba(255,94,91,.3); }
+        .cursor {
+            display: inline-block; width: 2px; height: 1.8rem;
+            background: var(--accent); margin-left: 2px; vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* ── Inputs ── */
+        .inputs-row { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin-bottom: 1rem; }
+        .input-wrap { display: flex; flex-direction: column; gap: .35rem; }
+        .input-wrap label { font-family: var(--mono); font-size: .68rem; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+        .input-wrap input {
+            background: #0d0f14; border: 1px solid var(--border); border-radius: 6px;
+            color: var(--text); font-family: var(--mono); font-size: 1rem;
+            padding: .55rem .8rem; outline: none; width: 100%;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .input-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,195,.1); }
+
+        /* ── Buttons ── */
+        .btn-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: .5rem; }
+        .btn {
+            font-family: var(--mono); font-size: .95rem; padding: .7rem .4rem;
+            border: 1px solid var(--border); border-radius: 8px;
+            background: var(--surface); color: var(--text);
+            cursor: pointer; transition: background .15s, border-color .15s, transform .1s, box-shadow .15s;
+            user-select: none;
+        }
+        .btn:hover { background: #21273a; border-color: var(--accent); box-shadow: 0 0 10px rgba(0,229,195,.12); }
+        .btn:active { transform: scale(.95); }
+        .btn.primary { background: linear-gradient(135deg,#003d35,#005548); border-color: var(--accent); color: var(--accent); font-weight: bold; }
+        .btn.primary:hover { background: linear-gradient(135deg,#005548,#007a64); box-shadow: var(--glow); }
+        .btn.danger { border-color: #3a1a1a; color: var(--accent2); }
+        .btn.danger:hover { background: #2a1010; border-color: var(--accent2); box-shadow: 0 0 10px rgba(255,94,91,.15); }
+        .btn.gold { border-color: #3a2e00; color: var(--gold); }
+        .btn.gold:hover { background: #251e00; border-color: var(--gold); box-shadow: 0 0 10px rgba(240,192,64,.15); }
+        .btn.span2 { grid-column: span 2; }
+
+        /* ── Toast ── */
+        #toast {
+            display: none; background: #2a0f0f; border: 1px solid var(--accent2);
+            border-radius: 6px; padding: .55rem .9rem; margin-top: .9rem;
+            font-family: var(--mono); font-size: .78rem; color: var(--accent2);
+        }
+
+        /* ── History ── */
+        .history-panel { display: flex; flex-direction: column; }
+        .history-panel .panel-body { flex:1; padding:0; overflow:hidden; display:flex; flex-direction:column; }
+        .history-controls {
+            display: flex; gap: .6rem; align-items: center;
+            padding: .9rem 1.2rem; border-bottom: 1px solid var(--border);
+        }
+        .history-controls input {
+            flex: 1; background: #0d0f14; border: 1px solid var(--border); border-radius: 6px;
+            color: var(--text); font-family: var(--mono); font-size: .8rem; padding: .4rem .7rem; outline: none;
+        }
+        .history-controls input:focus { border-color: var(--accent); }
+        .btn-sm {
+            font-family: var(--mono); font-size: .72rem; padding: .4rem .8rem;
+            border-radius: 6px; border: 1px solid; cursor: pointer; transition: all .15s; white-space: nowrap;
+            background: transparent;
+        }
+        .btn-sm.clear-all { border-color: var(--accent2); color: var(--accent2); }
+        .btn-sm.clear-all:hover { background: rgba(255,94,91,.08); }
+
+        .history-table-wrap { overflow-y: auto; flex: 1; max-height: 420px; }
+        table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: .8rem; }
+        thead th {
+            background: var(--surface); padding: .6rem .9rem; text-align: left;
+            font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+            position: sticky; top: 0; z-index: 1; border-bottom: 1px solid var(--border);
+        }
+        tbody tr { border-bottom: 1px solid var(--border); transition: background .15s; }
+        tbody tr:hover { background: rgba(255,255,255,.025); }
+        tbody td { padding: .55rem .9rem; }
+        tbody td.op-sym { color: var(--gold); }
+        tbody td.res    { color: var(--accent); }
+        tbody td.act    { text-align: right; }
+        .del-btn {
+            background: none; border: 1px solid #3a1a1a; color: var(--accent2);
+            font-family: var(--mono); font-size: .7rem; padding: .25rem .5rem;
+            border-radius: 4px; cursor: pointer; transition: all .15s;
+        }
+        .del-btn:hover { background: rgba(255,94,91,.1); border-color: var(--accent2); }
+
+        .empty-state { padding: 3rem 1rem; text-align: center; font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+        .empty-state .icon { font-size: 2rem; margin-bottom: .5rem; opacity: .4; }
+
+        footer {
+            text-align: center; padding: 1rem;
+            font-family: var(--mono); font-size: .65rem; color: var(--muted);
+            border-top: 1px solid var(--border);
+        }
+
+        @keyframes fadeSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        .new-row { animation: fadeSlide .3s ease both; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-mark">∑</div>
+    <h1>CalcWeb</h1>
+    <span class="sub">JavaScript · Histórico Local</span>
+</header>
+
+<main>
+
+    <!-- ── Calculadora ── -->
+    <section class="panel">
+        <div class="panel-header">
+            <div class="dot" style="background:#00e5c3"></div>
+            <div class="dot" style="background:#f0c040"></div>
+            <div class="dot" style="background:#ff5e5b"></div>
+            <h2>Calculadora</h2>
+        </div>
+        <div class="panel-body">
+
+            <div class="display">
+                <div class="expression" id="expression">&nbsp;</div>
+                <div class="result-value" id="result">0<span class="cursor"></span></div>
+            </div>
+
+            <div class="inputs-row">
+                <div class="input-wrap">
+                    <label>Número 1</label>
+                    <!-- RF07 negativos | RF08 decimais: step="any" -->
+                    <input type="number" id="n1" placeholder="ex: -3.14" step="any" />
+                </div>
+                <div class="input-wrap">
+                    <label>Número 2</label>
+                    <input type="number" id="n2" placeholder="ex: 2" step="any" />
+                </div>
+            </div>
+
+            <div class="btn-grid">
+                <button class="btn primary" onclick="operar('+')">+</button>   <!-- RF01 -->
+                <button class="btn primary" onclick="operar('-')">−</button>   <!-- RF02 -->
+                <button class="btn primary" onclick="operar('*')">×</button>   <!-- RF03 -->
+                <button class="btn primary" onclick="operar('/')">÷</button>   <!-- RF04 -->
+
+                <button class="btn gold"       onclick="operar('%')">n1 % n2</button>
+                <button class="btn gold"       onclick="operar('^')">n1 ^ n2</button>
+                <button class="btn gold span2" onclick="operar('sqrt')">√ n1</button>
+
+                <button class="btn danger span2" onclick="limpar()">⌫ Limpar</button>
+            </div>
+
+            <div id="toast"></div>
+        </div>
+    </section>
+
+    <!-- ── Histórico ── -->
+    <section class="panel history-panel">
+        <div class="panel-header">
+            <div class="dot" style="background:#f0c040"></div>
+            <h2>Histórico de Operações (RF09 · RF10)</h2>
+        </div>
+        <div class="panel-body">
+            <div class="history-controls">
+                <input type="text" id="searchInput" placeholder="Filtrar por operador  ex: + ou sqrt..." oninput="renderHistorico()" />
+                <button class="btn-sm clear-all" onclick="limparTudo()">🗑 Limpar tudo</button>
+            </div>
+            <div class="history-table-wrap">
+                <table>
+                    <thead>
+                    <tr><th>#</th><th>N1</th><th>Op</th><th>N2</th><th>Resultado</th><th>Ação</th></tr>
+                    </thead>
+                    <tbody id="histBody">
+                    <tr><td colspan="6">
+                        <div class="empty-state"><div class="icon">📋</div>Nenhuma operação ainda.</div>
+                    </td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>CalcWeb — Cálculos em JavaScript · Histórico em memória local</footer>
+
+<script>
+    /* ── Estado em memória (simula RF09) ── */
+    let historico  = [];
+    let proximoId  = 1;
+
+    const opLabel = { '+':'+', '-':'−', '*':'×', '/':'÷', '%':'%', '^':'^', 'sqrt':'√' };
+
+    /* ── Lógica de cálculo local ── */
+    function calcular(n1, n2, op) {
+        switch (op) {
+            case '+':    return n1 + n2;                                           // RF01
+            case '-':    return n1 - n2;                                           // RF02
+            case '*':    return n1 * n2;                                           // RF03
+            case '/':                                                              // RF04
+                if (n2 === 0) throw new Error('Divisão por zero não é permitida.');  // RF05
+                return n1 / n2;
+            case '%':    return (n1 * n2) / 100;
+            case '^':    return Math.pow(n1, n2);
+            case 'sqrt':
+                if (n1 < 0) throw new Error('Raiz quadrada de número negativo é indefinida.');
+                return Math.sqrt(n1);
+            default: throw new Error('Operador inválido: ' + op);
+        }
+    }
+
+    /* ── Botão de operação ── */
+    function operar(op) {
+        esconderErro();
+
+        const n1Raw = document.getElementById('n1').value;
+        const n2Raw = document.getElementById('n2').value;
+
+        // RF06 – validar entradas inválidas
+        if (n1Raw === '') { mostrarErro('Informe o Número 1.'); return; }
+        if (op !== 'sqrt' && n2Raw === '') { mostrarErro('Informe o Número 2.'); return; }
+
+        const n1 = parseFloat(n1Raw);
+        const n2 = parseFloat(n2Raw);
+
+        if (isNaN(n1)) { mostrarErro('Número 1 inválido. Digite um número.'); return; }
+        if (op !== 'sqrt' && isNaN(n2)) { mostrarErro('Número 2 inválido. Digite um número.'); return; }
+
+        const exprText = op === 'sqrt'
+            ? `√(${fmt(n1)})`
+            : `${fmt(n1)} ${opLabel[op]} ${fmt(n2)}`;
+
+        document.getElementById('expression').textContent = exprText + ' =';
+
+        try {
+            const resultado = calcular(n1, n2, op);
+            setResult(fmt(resultado), false);
+
+            // RF09 – registrar no histórico local
+            historico.push({ id: proximoId++, n1, n2, operador: op, result: resultado });
+            renderHistorico();
+
+        } catch (e) {
+            mostrarErro(e.message);
+            setResult('ERRO', true);
+        }
+    }
+
+    /* ── Display ── */
+    function setResult(val, isErr) {
+        const el = document.getElementById('result');
+        el.textContent = val;
+        el.classList.toggle('error', isErr);
+    }
+
+    function fmt(n) {
+        if (n === null || n === undefined) return '—';
+        if (n === 0) return '0';
+        const abs = Math.abs(n);
+        if (abs >= 1e-6 && abs < 1e12) return parseFloat(n.toPrecision(10)).toString();
+        return n.toExponential(4);
+    }
+
+    /* ── Limpar ── */
+    function limpar() {
+        document.getElementById('n1').value = '';
+        document.getElementById('n2').value = '';
+        document.getElementById('expression').innerHTML = '&nbsp;';
+        setResult('0', false);
+        esconderErro();
+    }
+
+    /* ── Erros ── */
+    function mostrarErro(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = '⚠ ' + msg;
+        t.style.display = 'block';
+    }
+    function esconderErro() {
+        document.getElementById('toast').style.display = 'none';
+    }
+
+    /* ── Histórico RF10 ── */
+    function renderHistorico() {
+        const body   = document.getElementById('histBody');
+        const filtro = document.getElementById('searchInput').value.trim().toLowerCase();
+
+        const lista = filtro
+            ? historico.filter(o =>
+                o.operador.toLowerCase().includes(filtro) ||
+                (opLabel[o.operador] ?? '').toLowerCase().includes(filtro))
+            : historico;
+
+        if (lista.length === 0) {
+            body.innerHTML = `<tr><td colspan="6">
+        <div class="empty-state"><div class="icon">📋</div>Nenhuma operação encontrada.</div>
+      </td></tr>`;
+            return;
+        }
+
+        body.innerHTML = lista.slice().reverse().map(o => `
+      <tr class="new-row">
+        <td style="color:var(--muted)">${o.id}</td>
+        <td>${fmt(o.n1)}</td>
+        <td class="op-sym">${opLabel[o.operador] ?? o.operador}</td>
+        <td>${o.operador === 'sqrt' ? '—' : fmt(o.n2)}</td>
+        <td class="res">${fmt(o.result)}</td>
+        <td class="act"><button class="del-btn" onclick="excluir(${o.id})">✕</button></td>
+      </tr>
+    `).join('');
+    }
+
+    /* ── Excluir entrada ── */
+    function excluir(id) {
+        historico = historico.filter(o => o.id !== id);
+        renderHistorico();
+    }
+
+    /* ── Limpar tudo ── */
+    function limparTudo() {
+        if (historico.length === 0) return;
+        if (confirm('Limpar todo o histórico?')) {
+            historico  = [];
+            proximoId  = 1;
+            renderHistorico();
+        }
+    }
+</script>
+</body>
+</html>
