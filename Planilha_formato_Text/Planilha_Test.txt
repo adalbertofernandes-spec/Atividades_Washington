@@ -1,0 +1,399 @@
+================================================================
+       PLANO DE TESTE CAIXA PRETA — CALCWEB
+       Disciplina: Desenvolvimento de Sistemas
+       Data: 13/05/2026
+================================================================
+
+NOME DO TESTADOR : Adalberto Fernandes
+TURMA            : DS-93314  TURNO: Noturno
+PROFESSOR        : Prof. Washington 
+
+----------------------------------------------------------------
+obs: fiz os testes aqui em em sala de aula, abri o html pelo chrome mesmo.
+     alguns deram errado, anontei o que achei estranho.
+     coloquei valores aleatorios em alguns pra ver se segurava
+----------------------------------------------------------------
+
+
+================================================================
+  BLOCO 1 — OPERAÇÕES BÁSICAS (RF01, RF02, RF03, RF04)
+================================================================
+
+[ CT-01 ] SOMA DE DOIS NÚMEROS POSITIVOS
+  Número 1     : 15
+  Número 2     : 8
+  Ação         : Clicar no botão  +
+  Resultado Esperado : 23
+  Resultado Obtido   : 23
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ok, basico funcionou
+
+---
+
+[ CT-02 ] SUBTRAÇÃO COM RESULTADO POSITIVO
+  Número 1     : 50
+  Número 2     : 20
+  Ação         : Clicar no botão  −
+  Resultado Esperado : 30
+  Resultado Obtido   : 30
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : certo
+
+---
+
+[ CT-03 ] SUBTRAÇÃO COM RESULTADO NEGATIVO
+  Número 1     : 5
+  Número 2     : 12
+  Ação         : Clicar no botão  −
+  Resultado Esperado : -7
+  Resultado Obtido   : -7
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : achei que ia dar zero ou erro mas deu -7, ta correto
+
+---
+
+[ CT-04 ] MULTIPLICAÇÃO SIMPLES
+  Número 1     : 7
+  Número 2     : 6
+  Ação         : Clicar no botão  ×
+  Resultado Esperado : 42
+  Resultado Obtido   : 42
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : passou
+
+---
+
+[ CT-05 ] DIVISÃO EXATA
+  Número 1     : 100
+  Número 2     : 4
+  Ação         : Clicar no botão  ÷
+  Resultado Esperado : 25
+  Resultado Obtido   : 25
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ok
+
+---
+
+[ CT-06 ] DIVISÃO COM RESULTADO DECIMAL
+  Número 1     : 10
+  Número 2     : 3
+  Ação         : Clicar no botão  ÷
+  Resultado Esperado : 3.333333333 (aproximado)
+  Resultado Obtido   : 3.333333333
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : deu um monte de 3 depois do ponto, parece certo
+
+
+================================================================
+  BLOCO 2 — DIVISÃO POR ZERO (RF05)
+================================================================
+
+[ CT-07 ] DIVISÃO POR ZERO — DEVE MOSTRAR ERRO
+  Número 1     : 9
+  Número 2     : 0
+  Ação         : Clicar no botão  ÷
+  Resultado Esperado : Mensagem de erro "Divisão por zero não é permitida."
+  Resultado Obtido   : "Divisão por zero não é permitida."
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : apareceu a mensagem certa, nao deixou dividir
+
+---
+
+[ CT-08 ] DIVISÃO POR ZERO COM NÚMERO NEGATIVO — DEVE MOSTRAR ERRO
+  Número 1     : -50
+  Número 2     : 0
+  Ação         : Clicar no botão  ÷
+  Resultado Esperado : Mensagem de erro
+  Resultado Obtido   : deu o mesmo erro de divisao por zero
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ok
+
+
+================================================================
+  BLOCO 3 — ENTRADAS INVÁLIDAS (RF06)
+================================================================
+
+[ CT-09 ] CAMPO NÚMERO 1 VAZIO
+  Número 1     : (vazio)
+  Número 2     : 5
+  Ação         : Clicar em qualquer operação
+  Resultado Esperado : Mensagem de erro "Informe o Número 1."
+  Resultado Obtido   : "Informe o Número 1."
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : passou
+
+---
+
+[ CT-10 ] CAMPO NÚMERO 2 VAZIO
+  Número 1     : 10
+  Número 2     : (vazio)
+  Ação         : Clicar no botão  +
+  Resultado Esperado : Mensagem de erro "Informe o Número 2."
+  Resultado Obtido   : "Informe o Número 2."
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ok
+
+---
+
+[ CT-11 ] DOIS CAMPOS VAZIOS
+  Número 1     : (vazio)
+  Número 2     : (vazio)
+  Ação         : Clicar no botão  ×
+  Resultado Esperado : Mensagem de erro
+  Resultado Obtido   : "Informe o Número 1."
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : pediu so o campo 1, mas tudo bem, faz sentido
+
+
+================================================================
+  BLOCO 4 — NÚMEROS NEGATIVOS (RF07)
+================================================================
+
+[ CT-12 ] SOMA COM DOIS NEGATIVOS
+  Número 1     : -10
+  Número 2     : -5
+  Ação         : Clicar no botão  +
+  Resultado Esperado : -15
+  Resultado Obtido   : -15
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : funcionou normal
+
+---
+
+[ CT-13 ] MULTIPLICAÇÃO COM UM NEGATIVO
+  Número 1     : -4
+  Número 2     : 5
+  Ação         : Clicar no botão  ×
+  Resultado Esperado : -20
+  Resultado Obtido   : -20
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : certo
+
+---
+
+[ CT-14 ] MULTIPLICAÇÃO COM DOIS NEGATIVOS
+  Número 1     : -3
+  Número 2     : -3
+  Ação         : Clicar no botão  ×
+  Resultado Esperado : 9
+  Resultado Obtido   : 9
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : negativo com negativo virou positivo, matematica certa
+
+
+================================================================
+  BLOCO 5 — NÚMEROS DECIMAIS (RF08)
+================================================================
+
+[ CT-15 ] SOMA COM DECIMAIS
+  Número 1     : 1.5
+  Número 2     : 2.3
+  Ação         : Clicar no botão  +
+  Resultado Esperado : 3.8
+  Resultado Obtido   : 3.8
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ok
+
+---
+
+[ CT-16 ] DIVISÃO COM RESULTADO DECIMAL
+  Número 1     : 7.5
+  Número 2     : 2
+  Ação         : Clicar no botão  ÷
+  Resultado Esperado : 3.75
+  Resultado Obtido   : 3.75
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : certo
+
+---
+
+[ CT-17 ] NÚMERO DECIMAL NEGATIVO
+  Número 1     : -2.5
+  Número 2     : 4
+  Ação         : Clicar no botão  ×
+  Resultado Esperado : -10
+  Resultado Obtido   : -10
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : passou
+
+
+================================================================
+  BLOCO 6 — OPERAÇÕES EXTRAS
+================================================================
+
+[ CT-18 ] PORCENTAGEM
+  Número 1     : 200
+  Número 2     : 15
+  Ação         : Clicar em  n1 % n2
+  Resultado Esperado : 30  (15% de 200)
+  Resultado Obtido   : 30
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ok, bate com a calculadora do celular
+
+---
+
+[ CT-19 ] POTENCIAÇÃO
+  Número 1     : 2
+  Número 2     : 10
+  Ação         : Clicar em  n1 ^ n2
+  Resultado Esperado : 1024
+  Resultado Obtido   : 1024
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : conferi no google, ta certo
+
+---
+
+[ CT-20 ] RAIZ QUADRADA DE NÚMERO POSITIVO
+  Número 1     : 144
+  Número 2     : (nao usei)
+  Ação         : Clicar em  √ n1
+  Resultado Esperado : 12
+  Resultado Obtido   : 12
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : 12 x 12 = 144, ok
+
+---
+
+[ CT-21 ] RAIZ QUADRADA DE NÚMERO NEGATIVO — DEVE DAR ERRO
+  Número 1     : -9
+  Número 2     : (nao usei)
+  Ação         : Clicar em  √ n1
+  Resultado Esperado : Mensagem de erro
+  Resultado Obtido   : "Raiz quadrada de número negativo é indefinida."
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ok, bloqueou certinho
+
+
+================================================================
+  BLOCO 7 — HISTÓRICO (RF09, RF10)
+================================================================
+
+[ CT-22 ] VERIFICAR SE OPERAÇÃO APARECE NO HISTÓRICO
+  Ação         : fiz a conta 7 x 6
+  Resultado Esperado : A operação aparece na tabela de histórico
+  Resultado Obtido   : apareceu na tabela
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ficou registrado com n1, operador, n2 e resultado
+
+---
+
+[ CT-23 ] EXCLUIR UMA OPERAÇÃO DO HISTÓRICO
+  Pré-condição : tinha varias contas feitas
+  Ação         : cliquei no X de uma linha
+  Resultado Esperado : só aquela linha some
+  Resultado Obtido   : a linha sumiu, as outras ficaram
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : certo
+
+---
+
+[ CT-24 ] LIMPAR TODO O HISTÓRICO
+  Pré-condição : historico com varias linhas
+  Ação         : cliquei em Limpar tudo e confirmei
+  Resultado Esperado : tabela vazia
+  Resultado Obtido   : limpou tudo
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ok
+
+---
+
+[ CT-25 ] FILTRAR HISTÓRICO POR OPERADOR
+  Pré-condição : fiz varios tipos de conta
+  Ação         : digitei "/" no filtro
+  Resultado Esperado : só as divisões aparecem
+  Resultado Obtido   : só as divisoes ficaram
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : funcionou bem o filtro
+
+----------------------------------------------------------------
+  TESTES EXTRAS QUE EU FIZ POR CONTA (fui alem do roteiro)
+----------------------------------------------------------------
+
+[ CT-EXTRA-01 ] NUMERO MUITO GRANDE
+  Número 1     : 999999999
+  Número 2     : 999999999
+  Ação         : Clicar em  ×
+  Resultado Esperado : nao sabia, queria ver o que acontecia
+  Resultado Obtido   : 999999998000000000  (apareceu em notacao normal)
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : nao travou nem deu erro, calculou tranquilo
+
+---
+
+[ CT-EXTRA-02 ] ZERO DIVIDIDO POR NUMERO
+  Número 1     : 0
+  Número 2     : 5
+  Ação         : Clicar em  ÷
+  Resultado Esperado : 0  (isso nao é o mesmo que dividir por zero)
+  Resultado Obtido   : 0
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : zero dividido por qualquer numero é zero, passou
+
+---
+
+[ CT-EXTRA-03 ] SOMA DE ZERO COM ZERO
+  Número 1     : 0
+  Número 2     : 0
+  Ação         : Clicar em  +
+  Resultado Esperado : 0
+  Resultado Obtido   : 0
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : ok
+
+---
+
+[ CT-EXTRA-04 ] RESULTADO ESPERADO ERRADO (ERRO DO TESTADOR)
+  Número 1     : 9
+  Número 2     : 4
+  Ação         : Clicar em  ×
+  Resultado Esperado : 36  <- ERREI, achei que era 9x4=36 mas é 36 msm nao
+                             espera... 9x4 = 36, sim ta certo, eu errei na
+                             hora de conferir
+  Resultado Obtido   : 36
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : o sistema ta certo, fui eu que me confundi
+
+---
+
+[ CT-EXTRA-05 ] RAIZ DE NUMERO NAO EXATO
+  Número 1     : 2
+  Número 2     : (nao usado)
+  Ação         : Clicar em  √ n1
+  Resultado Esperado : 1.414... (aproximado)
+  Resultado Obtido   : 1.414213562
+  Status             : [X] PASSOU   [ ] FALHOU
+  Observação         : apareceu o valor irracional aproximado, ta correto
+
+---
+
+[ CT-EXTRA-06 ] FECHAR E ABRIR O NAVEGADOR — HISTORICO SOME
+  Ação         : fechei o chrome e abri o index.html de novo
+  Resultado Esperado : nao sabia o que ia acontecer
+  Resultado Obtido   : o historico estava vazio
+  Status             : [ ] PASSOU   [X] FALHOU
+  Observação         : o historico sumiu quando fechei o navegador.
+                       isso pode ser um problema dependendo do uso.
+                       mas o professor falou que era H2 em memoria,
+                       entao talvez seja comportamento esperado mesmo.
+                       vou marcar como falhou e perguntar em aula.
+
+
+================================================================
+  RESUMO FINAL
+================================================================
+
+  Total de casos de teste  : 25 (plano) + 6 (extras)
+  Casos PASSOU             : 30
+  Casos FALHOU             : 1  (CT-EXTRA-06 - historico some ao fechar)
+  Taxa de aprovação        : 96,7%
+
+  Comentários gerais do testador:
+  No geral o sistema funcionou muito bem. Todos os 25 casos
+  do plano passaram sem problema. Os extras que inventei
+  tambem passaram, menos o de fechar o navegador que perdeu
+  o historico. Mas pode ser que seja assim mesmo por ser
+  memoria local. Vou tirar a duvida com o professor.
+  O sistema trata bem os erros, nao deixa dividir por zero
+  e avisa quando o campo ta vazio. Aprovado!
+
+================================================================
